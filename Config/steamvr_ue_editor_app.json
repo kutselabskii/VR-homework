@@ -1,0 +1,18 @@
+{
+	"source": "UE",
+	"applications": [
+		{
+			"app_key": "application.generated.ue.simple_movement-11590370.ue4editor.exe",
+			"launch_type": "url",
+			"url": "steam://launch/",
+			"action_manifest_path": "C:/UE/projects/2 КУРС ВР ДОМАХИ/kutselabskii_1/Config/SteamVRBindings/steamvr_manifest.json",
+			"strings":
+			{
+				"en_us":
+				{
+					"name": "Simple_movement-11590370 [UE Editor]"
+				}
+			}
+		}
+	]
+}
