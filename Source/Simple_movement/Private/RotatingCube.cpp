@@ -6,7 +6,7 @@
 
 ARotatingCube::ARotatingCube() : Super::AInteractiveActor()
 {
-    ConstructorHelpers::FObjectFinder<UStaticMesh> CubeVisualAsset(TEXT("/Game/Content/Meshes/BaseCubeMesh"));
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeVisualAsset(TEXT("/Game/Meshes/BaseCubeMesh"));
 
     if (CubeVisualAsset.Succeeded())
     {
@@ -16,7 +16,14 @@ ARotatingCube::ARotatingCube() : Super::AInteractiveActor()
 
 void ARotatingCube::BeginPlay()
 {
-    
+    Super::BeginPlay();
 
-	SetActorScale3D(FVector(1.0f, 1.0f, 2.0f));
+	SetActorScale3D(FVector(1.0f, 2.0f, 1.0f));
+}
+
+void ARotatingCube::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+
+    AddActorWorldRotation(FRotator(40 * DeltaTime, 150 * DeltaTime, 75 * DeltaTime));
 }

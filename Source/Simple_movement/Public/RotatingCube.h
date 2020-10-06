@@ -16,6 +16,8 @@ class SIMPLE_MOVEMENT_API ARotatingCube : public AInteractiveActor
 	
 public:
 	ARotatingCube();
+	void Tick(float DeltaTime) override;
 
+protected:
 	void BeginPlay() override;
 };
