@@ -28,3 +28,13 @@ void APulsatingSphere::Tick(float DeltaTime)
 
     SetActorScale3D(FVector(value, value, value));
 }
+
+void APulsatingSphere::Selected_Implementation()
+{
+    Destroy();
+}
+
+void APulsatingSphere::Activated_Implementation()
+{
+    
+}
