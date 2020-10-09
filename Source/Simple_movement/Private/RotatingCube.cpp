@@ -25,5 +25,17 @@ void ARotatingCube::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    AddActorWorldRotation(FRotator(40 * DeltaTime, 150 * DeltaTime, 75 * DeltaTime));
+    if (isRotating) {
+        AddActorWorldRotation(FRotator(40 * DeltaTime, 150 * DeltaTime, 75 * DeltaTime));
+    }
+}
+
+void ARotatingCube::Selected_Implementation()
+{
+    isRotating = !isRotating;
+}
+
+void ARotatingCube::Activated_Implementation()
+{
+
 }

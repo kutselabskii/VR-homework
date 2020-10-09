@@ -31,10 +31,10 @@ void APulsatingSphere::Tick(float DeltaTime)
 
 void APulsatingSphere::Selected_Implementation()
 {
-    Destroy();
+
 }
 
 void APulsatingSphere::Activated_Implementation()
 {
-    
+    Destroy();
 }
