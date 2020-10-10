@@ -19,9 +19,19 @@ public:
 	APulsatingSphere();
 	void Tick(float DeltaTime) override;
 
-	void Selected_Implementation() override;
+	void TraceHitObject_Implementation() override;
 
-	void Activated_Implementation() override;
+	void TraceLeaveObject_Implementation() override;
+
+	void TraceHitComponent_Implementation() override;
+
+	void TraceLeaveComponent_Implementation() override;
+
+	void TraceMove_Implementation() override;
+
+	void TraceActivateDown_Implementation() override;
+
+	void TraceActivateUp_Implementation() override;
 
 protected:
 	void BeginPlay() override;

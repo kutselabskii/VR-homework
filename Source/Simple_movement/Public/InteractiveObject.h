@@ -6,7 +6,6 @@
 #include "UObject/Interface.h"
 #include "InteractiveObject.generated.h"
 
-// This class does not need to be modified.
 UINTERFACE(MinimalAPI, Blueprintable)
 class UInteractiveObject : public UInterface
 {
@@ -20,11 +19,25 @@ class SIMPLE_MOVEMENT_API IInteractiveObject
 {
 	GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void Selected();
+	void TraceHitObject();
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void Activated();
+	void TraceLeaveObject();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void TraceHitComponent();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void TraceLeaveComponent();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void TraceMove();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void TraceActivateDown();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void TraceActivateUp();
 };

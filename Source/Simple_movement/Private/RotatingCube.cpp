@@ -30,12 +30,47 @@ void ARotatingCube::Tick(float DeltaTime)
     }
 }
 
-void ARotatingCube::Selected_Implementation()
+//void ARotatingCube::Selected_Implementation()
+//{
+//    isRotating = !isRotating;
+//}
+//
+//void ARotatingCube::Activated_Implementation()
+//{
+//
+//}
+
+void ARotatingCube::TraceHitObject_Implementation()
 {
-    isRotating = !isRotating;
+    isRotating = false;
 }
 
-void ARotatingCube::Activated_Implementation()
+void ARotatingCube::TraceLeaveObject_Implementation()
+{
+    isRotating = true;
+}
+
+void ARotatingCube::TraceHitComponent_Implementation()
+{
+
+}
+
+void ARotatingCube::TraceLeaveComponent_Implementation()
+{
+
+}
+
+void ARotatingCube::TraceMove_Implementation()
+{
+
+}
+
+void ARotatingCube::TraceActivateDown_Implementation()
+{
+
+}
+
+void ARotatingCube::TraceActivateUp_Implementation()
 {
 
 }

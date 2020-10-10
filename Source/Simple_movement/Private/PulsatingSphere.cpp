@@ -29,12 +29,37 @@ void APulsatingSphere::Tick(float DeltaTime)
     SetActorScale3D(FVector(value, value, value));
 }
 
-void APulsatingSphere::Selected_Implementation()
+void APulsatingSphere::TraceHitObject_Implementation()
 {
 
 }
 
-void APulsatingSphere::Activated_Implementation()
+void APulsatingSphere::TraceLeaveObject_Implementation()
 {
-    Destroy();
+    
+}
+
+void APulsatingSphere::TraceHitComponent_Implementation()
+{
+
+}
+
+void APulsatingSphere::TraceLeaveComponent_Implementation()
+{
+
+}
+
+void APulsatingSphere::TraceMove_Implementation()
+{
+
+}
+
+void APulsatingSphere::TraceActivateDown_Implementation()
+{
+
+}
+
+void APulsatingSphere::TraceActivateUp_Implementation()
+{
+
 }
