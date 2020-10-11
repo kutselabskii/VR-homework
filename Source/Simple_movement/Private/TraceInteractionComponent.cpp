@@ -12,7 +12,7 @@ UTraceInteractionComponent::UTraceInteractionComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
-	bUsingLineTrace = true;
+	bUsingLineTrace = false;
 }
 
 
@@ -34,7 +34,7 @@ void UTraceInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickT
 	if (bUsingLineTrace) {
 		hitSomething = LineTrace(1000, hit);
 	} else {
-		hitSomething = ParabolicTrace(100, hit);
+		hitSomething = ParabolicTrace(1000, hit);
 	}
 
 	if (hitSomething) {
@@ -67,8 +67,20 @@ bool UTraceInteractionComponent::ParabolicTrace(float Speed, FHitResult& OutHit)
 
 	FPredictProjectilePathResult result;
 
-	auto params = FPredictProjectilePathParams(0.01f, startPos, velocity, 0.5f);
+	auto params = FPredictProjectilePathParams(0.01f, startPos, velocity, 2.0f);
 
-	return false;
+	auto hitSomething = UGameplayStatics::PredictProjectilePath(world, params, result);
+	
+	if (hitSomething) {
+		auto prevLoc = startPos;
+		for (auto point : result.PathData) {
+			DrawDebugLine(world, prevLoc, point.Location, FColor(128, 128, 128), false, -1.0f, 0, 2.0f);
+			prevLoc = point.Location;
+		}
+
+		OutHit = result.HitResult;
+	}
+
+	return hitSomething;
 }
 
