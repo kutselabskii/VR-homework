@@ -22,6 +22,6 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	virtual bool LineTrace(float Distance, FHitResult& OutHit);
-	virtual bool ParabolicTrace(float Speed, FHitResult& OutHit);
+	virtual bool LineTrace(const float Distance, FHitResult& OutHit);
+	virtual bool ParabolicTrace(const float Speed, const float TimeStep, const int Segments, FHitResult& OutHit);
 };

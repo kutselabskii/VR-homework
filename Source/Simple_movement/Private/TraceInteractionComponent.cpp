@@ -5,7 +5,6 @@
 
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
-#include "Kismet/GameplayStatics.h"
 #include "InteractiveObject.h"
 
 UTraceInteractionComponent::UTraceInteractionComponent()
@@ -34,7 +33,7 @@ void UTraceInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickT
 	if (bUsingLineTrace) {
 		hitSomething = LineTrace(1000, hit);
 	} else {
-		hitSomething = ParabolicTrace(1000, hit);
+		hitSomething = ParabolicTrace(1000, 0.05f, 20, hit);
 	}
 
 	if (hitSomething) {
@@ -44,11 +43,11 @@ void UTraceInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickT
 	}
 }
 
-bool UTraceInteractionComponent::LineTrace(float Distance, FHitResult& OutHit)
+bool UTraceInteractionComponent::LineTrace(const float Distance, FHitResult& OutHit)
 {
-	auto world = GetWorld();
-	auto startPos = GetComponentLocation();
-	auto endPos = startPos + GetForwardVector() * Distance;
+	const auto world = GetWorld();
+	const auto startPos = GetComponentLocation();
+	const auto endPos = startPos + GetForwardVector() * Distance;
 	
 	auto hitSomething = world->LineTraceSingleByChannel(OutHit, startPos, endPos, ECC_Visibility);
 
@@ -59,28 +58,35 @@ bool UTraceInteractionComponent::LineTrace(float Distance, FHitResult& OutHit)
 	return hitSomething;
 }
 
-bool UTraceInteractionComponent::ParabolicTrace(float Speed, FHitResult& OutHit)
+bool UTraceInteractionComponent::ParabolicTrace(const float Speed, const float TimeStep, const int Segments, FHitResult& OutHit)
 {
-	auto world = GetWorld();
-	auto startPos = GetComponentLocation();
-	auto velocity = startPos + GetForwardVector() * Speed;
-
-	FPredictProjectilePathResult result;
-
-	auto params = FPredictProjectilePathParams(0.01f, startPos, velocity, 2.0f);
-
-	auto hitSomething = UGameplayStatics::PredictProjectilePath(world, params, result);
+	const auto world = GetWorld();
+	const auto startPos = GetComponentLocation();
+	const auto velocity = startPos + GetForwardVector() * Speed;
+	const auto initialLocation = GetComponentLocation();
+	auto previousLocation = initialLocation;
 	
-	if (hitSomething) {
-		auto prevLoc = startPos;
-		for (auto point : result.PathData) {
-			DrawDebugLine(world, prevLoc, point.Location, FColor(128, 128, 128), false, -1.0f, 0, 2.0f);
-			prevLoc = point.Location;
+	TArray<FVector> points({ initialLocation });
+	for (int i = 0; i < Segments; ++i) {
+		const auto step = TimeStep * i;
+		const auto stepLocation = velocity * step;
+		const auto endingLocation = FVector(stepLocation.X, stepLocation.Y, stepLocation.Z - (double)step * step * 0.5 * 980) + initialLocation;
+
+		auto hitSomething = world->LineTraceSingleByChannel(OutHit, previousLocation, endingLocation, ECC_Visibility);
+		if (hitSomething) {
+			points.Add(OutHit.Location);
+
+			for (int j = 1; j < points.Num(); ++j) {
+				DrawDebugLine(world, points[j - 1], points[j], FColor(128, 128, 128), false, -1.0f, 0, 2.0f);
+			}
+
+			return true;
 		}
 
-		OutHit = result.HitResult;
+		previousLocation = endingLocation;
+		points.Add(endingLocation);
 	}
-
-	return hitSomething;
+	
+	return false;
 }
 
