@@ -27,10 +27,10 @@ public:
 	void TraceLeaveObject();
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void TraceHitComponent();
+	void TraceHitComponent(UPrimitiveComponent* Component);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void TraceLeaveComponent();
+	void TraceLeaveComponent(UPrimitiveComponent* Component);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void TraceMove();

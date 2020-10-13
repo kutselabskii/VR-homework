@@ -20,8 +20,12 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:
+	AActor* FocusedObject;
+	UPrimitiveComponent* FocusedComponent;
+
 	virtual void BeginPlay() override;
 
 	virtual bool LineTrace(const float Distance, FHitResult& OutHit);
 	virtual bool ParabolicTrace(const float Speed, const float TimeStep, const int Segments, FHitResult& OutHit);
+	virtual void InteractWithHit(const bool HitSomething, const FHitResult& Hit);
 };

@@ -36,10 +36,52 @@ void UTraceInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickT
 		hitSomething = ParabolicTrace(1000, 0.05f, 20, hit);
 	}
 
-	if (hitSomething) {
-		if (hit.GetActor()->GetClass()->ImplementsInterface(UInteractiveObject::StaticClass())) {
-			IInteractiveObject::Execute_TraceHitObject(hit.GetActor());
+	InteractWithHit(hitSomething, hit);
+}
+
+void UTraceInteractionComponent::InteractWithHit(const bool HitSomething, const FHitResult& Hit)
+{
+	if (!HitSomething) {
+		if (FocusedObject != nullptr) {
+			if (FocusedObject->Implements<UInteractiveObject>()) {
+				IInteractiveObject::Execute_TraceLeaveObject(FocusedObject);
+				IInteractiveObject::Execute_TraceLeaveComponent(FocusedObject, FocusedComponent);
+			}
+			FocusedObject = nullptr;
+			FocusedComponent = nullptr;
 		}
+		return;
+	}
+
+	auto hitActor = Hit.Actor.Get();
+	auto hitComponent = Hit.Component.Get();
+	bool newImplements = hitActor->Implements<UInteractiveObject>();
+
+	if (hitActor == FocusedObject) {
+		if (newImplements) {
+			IInteractiveObject::Execute_TraceMove(hitActor);
+		}
+		if (hitComponent != FocusedComponent) {
+			if (newImplements) {
+				IInteractiveObject::Execute_TraceLeaveComponent(hitActor, FocusedComponent);
+				IInteractiveObject::Execute_TraceHitComponent(hitActor, hitComponent);
+			}
+			FocusedComponent = hitComponent;
+		}
+		return;
+	}
+
+	if (FocusedObject != nullptr && FocusedObject->Implements<UInteractiveObject>()) {
+		IInteractiveObject::Execute_TraceLeaveObject(FocusedObject);
+	}
+	FocusedObject = nullptr;
+	FocusedComponent = nullptr;
+
+	if (newImplements) {
+		IInteractiveObject::Execute_TraceHitObject(hitActor);
+		IInteractiveObject::Execute_TraceHitComponent(hitActor, hitComponent);
+		FocusedObject = hitActor;
+		FocusedComponent = hitComponent;
 	}
 }
 

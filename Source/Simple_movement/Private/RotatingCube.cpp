@@ -50,12 +50,12 @@ void ARotatingCube::TraceLeaveObject_Implementation()
     isRotating = true;
 }
 
-void ARotatingCube::TraceHitComponent_Implementation()
+void ARotatingCube::TraceHitComponent_Implementation(UPrimitiveComponent* Component)
 {
 
 }
 
-void ARotatingCube::TraceLeaveComponent_Implementation()
+void ARotatingCube::TraceLeaveComponent_Implementation(UPrimitiveComponent* Component)
 {
 
 }

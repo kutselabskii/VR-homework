@@ -39,12 +39,12 @@ void APulsatingSphere::TraceLeaveObject_Implementation()
     
 }
 
-void APulsatingSphere::TraceHitComponent_Implementation()
+void APulsatingSphere::TraceHitComponent_Implementation(UPrimitiveComponent* Component)
 {
 
 }
 
-void APulsatingSphere::TraceLeaveComponent_Implementation()
+void APulsatingSphere::TraceLeaveComponent_Implementation(UPrimitiveComponent* Component)
 {
 
 }

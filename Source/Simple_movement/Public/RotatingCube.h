@@ -23,9 +23,9 @@ public:
 
 	void TraceLeaveObject_Implementation() override;
 
-	void TraceHitComponent_Implementation() override;
+	void TraceHitComponent_Implementation(UPrimitiveComponent* Component) override;
 
-	void TraceLeaveComponent_Implementation() override;
+	void TraceLeaveComponent_Implementation(UPrimitiveComponent* Component) override;
 
 	void TraceMove_Implementation() override;
 
