@@ -26,6 +26,8 @@ void UTraceInteractionComponent::BeginPlay()
 void UTraceInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	SetRelativeLocationAndRotation(FVector(0, 0, 0), FQuat(0, 0, 0, 0));
 	
 	FHitResult hit;
 	bool hitSomething;
@@ -33,7 +35,7 @@ void UTraceInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickT
 	if (bUsingLineTrace) {
 		hitSomething = LineTrace(1000, hit);
 	} else {
-		hitSomething = ParabolicTrace(1000, 0.05f, 20, hit);
+		hitSomething = ParabolicTrace(1000, 0.1f, 20, hit);
 	}
 
 	InteractWithHit(hitSomething, hit);
@@ -104,7 +106,7 @@ bool UTraceInteractionComponent::ParabolicTrace(const float Speed, const float T
 {
 	const auto world = GetWorld();
 	const auto startPos = GetComponentLocation();
-	const auto velocity = startPos + GetForwardVector() * Speed;
+	const auto velocity = GetForwardVector() * Speed;
 	const auto initialLocation = GetComponentLocation();
 	auto previousLocation = initialLocation;
 	
