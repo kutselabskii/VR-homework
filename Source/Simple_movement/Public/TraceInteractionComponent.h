@@ -19,6 +19,15 @@ public:
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void ActivateDownEvent(const AActor* Instigator);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void ActivateUpEvent(const AActor* Instigator);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USceneComponent* TeleportationVisuals;
+
 protected:
 	AActor* FocusedObject;
 	UPrimitiveComponent* FocusedComponent;

@@ -6,12 +6,13 @@
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
 #include "InteractiveObject.h"
+#include "UObject/ConstructorHelpers.h"
 
 UTraceInteractionComponent::UTraceInteractionComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
-	bUsingLineTrace = false;
+	bUsingLineTrace = true;
 }
 
 
@@ -19,6 +20,12 @@ UTraceInteractionComponent::UTraceInteractionComponent()
 void UTraceInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//static ConstructorHelpers::FObjectFinder<UClass> TeleportationBlueprint(TEXT("Blueprint'/Game/Blueprints/TeleportationVisuals.TeleportationVisuals'"));
+	//auto TeleportationClass = TeleportationBlueprint.Object;
+
+	//TeleportationVisuals = Cast<USceneComponent>(GetWorld()->SpawnActor<AActor>(TeleportationClass));
+	//TeleportationVisuals->SetVisibility(false);
 }
 
 
@@ -52,6 +59,7 @@ void UTraceInteractionComponent::InteractWithHit(const bool HitSomething, const 
 			FocusedObject = nullptr;
 			FocusedComponent = nullptr;
 		}
+		TeleportationVisuals->SetVisibility(false);
 		return;
 	}
 
@@ -63,6 +71,7 @@ void UTraceInteractionComponent::InteractWithHit(const bool HitSomething, const 
 		if (newImplements) {
 			IInteractiveObject::Execute_TraceMove(hitActor);
 		}
+
 		if (hitComponent != FocusedComponent) {
 			if (newImplements) {
 				IInteractiveObject::Execute_TraceLeaveComponent(hitActor, FocusedComponent);
@@ -73,8 +82,12 @@ void UTraceInteractionComponent::InteractWithHit(const bool HitSomething, const 
 		return;
 	}
 
-	if (FocusedObject != nullptr && FocusedObject->Implements<UInteractiveObject>()) {
-		IInteractiveObject::Execute_TraceLeaveObject(FocusedObject);
+	if (FocusedObject != nullptr) {
+		if (FocusedObject->Implements<UInteractiveObject>()) {
+			IInteractiveObject::Execute_TraceLeaveObject(FocusedObject);
+		} else {
+			TeleportationVisuals->SetVisibility(false);
+		}
 	}
 	FocusedObject = nullptr;
 	FocusedComponent = nullptr;
@@ -84,6 +97,8 @@ void UTraceInteractionComponent::InteractWithHit(const bool HitSomething, const 
 		IInteractiveObject::Execute_TraceHitComponent(hitActor, hitComponent);
 		FocusedObject = hitActor;
 		FocusedComponent = hitComponent;
+	} else {
+		TeleportationVisuals->SetVisibility(true);
 	}
 }
 
@@ -132,5 +147,19 @@ bool UTraceInteractionComponent::ParabolicTrace(const float Speed, const float T
 	}
 	
 	return false;
+}
+
+void UTraceInteractionComponent::ActivateDownEvent_Implementation(const AActor* Instigator)
+{
+	if (FocusedObject != nullptr && FocusedObject->Implements<UInteractiveObject>()) {
+		IInteractiveObject::Execute_TraceActivateDown(FocusedObject);
+	}
+}
+
+void UTraceInteractionComponent::ActivateUpEvent_Implementation(const AActor* Instigator)
+{
+	if (FocusedObject != nullptr && FocusedObject->Implements<UInteractiveObject>()) {
+		IInteractiveObject::Execute_TraceActivateUp(FocusedObject);
+	}
 }
 
