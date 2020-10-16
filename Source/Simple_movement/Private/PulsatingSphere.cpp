@@ -6,11 +6,11 @@
 
 APulsatingSphere::APulsatingSphere() : Super::AInteractiveActor()
 {
-    static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeVisualAsset(TEXT("/Game/Meshes/BaseSphereMesh"));
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> SphereVisualAsset(TEXT("/Game/Meshes/BaseSphereMesh"));
 
-    if (CubeVisualAsset.Succeeded())
+    if (SphereVisualAsset.Succeeded())
     {
-        StaticMeshComponent->SetStaticMesh(CubeVisualAsset.Object);
+        StaticMeshComponent->SetStaticMesh(SphereVisualAsset.Object);
     }
 }
 

@@ -6,13 +6,29 @@
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
 #include "InteractiveObject.h"
+#include "GameFramework/PlayerController.h"
+#include "GameFramework/Actor.h"
 #include "UObject/ConstructorHelpers.h"
 
 UTraceInteractionComponent::UTraceInteractionComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
-	bUsingLineTrace = true;
+	TeleportationVisuals = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> TeleportationVisualsAsset(TEXT("/Engine/BasicShapes/Plane.Plane"));
+	static ConstructorHelpers::FObjectFinder<UMaterial> TeleportationVisualsMaterial(TEXT("Material'/Game/Materials/TeleportTexture.TeleportTexture'"));
+
+	if (TeleportationVisualsAsset.Succeeded())
+	{
+		TeleportationVisuals->SetStaticMesh(TeleportationVisualsAsset.Object);
+	}
+
+	if (TeleportationVisualsMaterial.Succeeded()) {
+		TeleportationVisuals->SetMaterial(0, TeleportationVisualsMaterial.Object);
+	}
+
+	bUsingLineTrace = false;
 }
 
 
@@ -20,12 +36,6 @@ UTraceInteractionComponent::UTraceInteractionComponent()
 void UTraceInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//static ConstructorHelpers::FObjectFinder<UClass> TeleportationBlueprint(TEXT("Blueprint'/Game/Blueprints/TeleportationVisuals.TeleportationVisuals'"));
-	//auto TeleportationClass = TeleportationBlueprint.Object;
-
-	//TeleportationVisuals = Cast<USceneComponent>(GetWorld()->SpawnActor<AActor>(TeleportationClass));
-	//TeleportationVisuals->SetVisibility(false);
 }
 
 
@@ -70,6 +80,8 @@ void UTraceInteractionComponent::InteractWithHit(const bool HitSomething, const 
 	if (hitActor == FocusedObject) {
 		if (newImplements) {
 			IInteractiveObject::Execute_TraceMove(hitActor);
+		} else {
+			TeleportationVisuals->SetWorldLocation(Hit.Location);
 		}
 
 		if (hitComponent != FocusedComponent) {
@@ -95,11 +107,13 @@ void UTraceInteractionComponent::InteractWithHit(const bool HitSomething, const 
 	if (newImplements) {
 		IInteractiveObject::Execute_TraceHitObject(hitActor);
 		IInteractiveObject::Execute_TraceHitComponent(hitActor, hitComponent);
-		FocusedObject = hitActor;
-		FocusedComponent = hitComponent;
 	} else {
 		TeleportationVisuals->SetVisibility(true);
+		TeleportationVisuals->SetWorldLocation(Hit.Location);
 	}
+
+	FocusedObject = hitActor;
+	FocusedComponent = hitComponent;
 }
 
 bool UTraceInteractionComponent::LineTrace(const float Distance, FHitResult& OutHit)
@@ -149,17 +163,30 @@ bool UTraceInteractionComponent::ParabolicTrace(const float Speed, const float T
 	return false;
 }
 
-void UTraceInteractionComponent::ActivateDownEvent_Implementation(const AActor* Instigator)
+void UTraceInteractionComponent::ActivateDownEvent_Implementation(AActor* Instigator)
 {
-	if (FocusedObject != nullptr && FocusedObject->Implements<UInteractiveObject>()) {
-		IInteractiveObject::Execute_TraceActivateDown(FocusedObject);
+	if (FocusedObject != nullptr) {
+		if (FocusedObject->Implements<UInteractiveObject>()) {
+			IInteractiveObject::Execute_TraceActivateDown(FocusedObject);
+		}
 	}
 }
 
-void UTraceInteractionComponent::ActivateUpEvent_Implementation(const AActor* Instigator)
+void UTraceInteractionComponent::ActivateUpEvent_Implementation(AActor* Instigator)
 {
-	if (FocusedObject != nullptr && FocusedObject->Implements<UInteractiveObject>()) {
-		IInteractiveObject::Execute_TraceActivateUp(FocusedObject);
+	if (FocusedObject != nullptr) {
+		if (FocusedObject->Implements<UInteractiveObject>()) {
+			IInteractiveObject::Execute_TraceActivateUp(FocusedObject);
+		} else {
+			TeleportPlayer(Instigator, TeleportationVisuals->GetComponentLocation());
+		}
 	}
+}
+
+void UTraceInteractionComponent::TeleportPlayer(AActor* Player, const FVector& Location)
+{
+	/*auto cameraLocation = GetWorld()->GetFirstPlayerController()->PlayerCameraManager->GetCameraLocation();
+	Player.GetActorLocation() - cameraLocation*/
+	Player->SetActorLocation(FVector(Location.X, Location.Y, Player->GetActorLocation().Z));
 }
 

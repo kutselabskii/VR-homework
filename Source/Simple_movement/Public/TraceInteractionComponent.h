@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/SceneComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "TraceInteractionComponent.generated.h"
 
 
@@ -20,13 +21,13 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void ActivateDownEvent(const AActor* Instigator);
+	void ActivateDownEvent(AActor* Instigator);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void ActivateUpEvent(const AActor* Instigator);
+	void ActivateUpEvent(AActor* Instigator);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	USceneComponent* TeleportationVisuals;
+	UStaticMeshComponent* TeleportationVisuals;
 
 protected:
 	AActor* FocusedObject;
@@ -37,4 +38,6 @@ protected:
 	virtual bool LineTrace(const float Distance, FHitResult& OutHit);
 	virtual bool ParabolicTrace(const float Speed, const float TimeStep, const int Segments, FHitResult& OutHit);
 	virtual void InteractWithHit(const bool HitSomething, const FHitResult& Hit);
+
+	virtual void TeleportPlayer(AActor* Player, const FVector& Location);
 };
