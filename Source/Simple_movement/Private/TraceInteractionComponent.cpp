@@ -28,7 +28,7 @@ UTraceInteractionComponent::UTraceInteractionComponent()
 		TeleportationVisuals->SetMaterial(0, TeleportationVisualsMaterial.Object);
 	}
 
-	bUsingLineTrace = false;
+	UsingLineTrace = false;
 }
 
 
@@ -49,7 +49,7 @@ void UTraceInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickT
 	FHitResult hit;
 	bool hitSomething;
 
-	if (bUsingLineTrace) {
+	if (UsingLineTrace) {
 		hitSomething = LineTrace(1000, hit);
 	} else {
 		hitSomething = ParabolicTrace(1000, 0.1f, 20, hit);
@@ -61,45 +61,67 @@ void UTraceInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickT
 void UTraceInteractionComponent::InteractWithHit(const bool HitSomething, const FHitResult& Hit)
 {
 	if (!HitSomething) {
-		if (FocusedObject != nullptr) {
-			if (FocusedObject->Implements<UInteractiveObject>()) {
-				IInteractiveObject::Execute_TraceLeaveObject(FocusedObject);
-				IInteractiveObject::Execute_TraceLeaveComponent(FocusedObject, FocusedComponent);
-			}
-			FocusedObject = nullptr;
-			FocusedComponent = nullptr;
-		}
-		TeleportationVisuals->SetVisibility(false);
+		NoHitOccured();
 		return;
 	}
 
 	auto hitActor = Hit.Actor.Get();
+	if (hitActor == FocusedObject) {
+		HitSameThing(Hit);
+		return;
+	}
+
+	HitOtherThing(Hit);
+}
+
+void UTraceInteractionComponent::NoHitOccured()
+{
+	if (FocusedObject != nullptr) {
+		if (FocusedObject->Implements<UInteractiveObject>()) {
+			IInteractiveObject::Execute_TraceLeaveObject(FocusedObject);
+			IInteractiveObject::Execute_TraceLeaveComponent(FocusedObject, FocusedComponent);
+		}
+		FocusedObject = nullptr;
+		FocusedComponent = nullptr;
+	}
+	TeleportationVisuals->SetVisibility(false);
+}
+
+void UTraceInteractionComponent::HitSameThing(const FHitResult& Hit)
+{
+	auto hitActor = Hit.Actor.Get();
 	auto hitComponent = Hit.Component.Get();
 	bool newImplements = hitActor->Implements<UInteractiveObject>();
 
-	if (hitActor == FocusedObject) {
-		if (newImplements) {
-			IInteractiveObject::Execute_TraceMove(hitActor);
-		} else {
-			TeleportationVisuals->SetWorldLocation(Hit.Location);
-		}
-
-		if (hitComponent != FocusedComponent) {
-			if (newImplements) {
-				IInteractiveObject::Execute_TraceLeaveComponent(hitActor, FocusedComponent);
-				IInteractiveObject::Execute_TraceHitComponent(hitActor, hitComponent);
-			}
-			FocusedComponent = hitComponent;
-		}
-		return;
+	if (newImplements) {
+		IInteractiveObject::Execute_TraceMove(hitActor);
 	}
+	else {
+		TeleportationVisuals->SetWorldLocation(Hit.Location + FVector(0, 0, 0.01f));
+	}
+
+	if (hitComponent != FocusedComponent) {
+		if (newImplements) {
+			IInteractiveObject::Execute_TraceLeaveComponent(hitActor, FocusedComponent);
+			IInteractiveObject::Execute_TraceHitComponent(hitActor, hitComponent);
+		}
+		FocusedComponent = hitComponent;
+	}
+	return;
+}
+
+void UTraceInteractionComponent::HitOtherThing(const FHitResult& Hit)
+{
+	auto hitActor = Hit.Actor.Get();
+	auto hitComponent = Hit.Component.Get();
+	bool newImplements = hitActor->Implements<UInteractiveObject>();
 
 	if (FocusedObject != nullptr) {
 		if (FocusedObject->Implements<UInteractiveObject>()) {
 			IInteractiveObject::Execute_TraceLeaveObject(FocusedObject);
-		} else {
-			TeleportationVisuals->SetVisibility(false);
 		}
+
+		TeleportationVisuals->SetVisibility(false);
 	}
 	FocusedObject = nullptr;
 	FocusedComponent = nullptr;
@@ -107,7 +129,8 @@ void UTraceInteractionComponent::InteractWithHit(const bool HitSomething, const 
 	if (newImplements) {
 		IInteractiveObject::Execute_TraceHitObject(hitActor);
 		IInteractiveObject::Execute_TraceHitComponent(hitActor, hitComponent);
-	} else {
+	}
+	else {
 		TeleportationVisuals->SetVisibility(true);
 		TeleportationVisuals->SetWorldLocation(Hit.Location);
 	}
@@ -125,7 +148,8 @@ bool UTraceInteractionComponent::LineTrace(const float Distance, FHitResult& Out
 	auto hitSomething = world->LineTraceSingleByChannel(OutHit, startPos, endPos, ECC_Visibility);
 
 	if (hitSomething) {
-		DrawDebugLine(world, startPos, OutHit.Location, FColor(128, 128, 128), false, -1.0f, 0, 2.0f);
+		auto color = OutHit.Actor.Get()->Implements<UInteractiveObject>() ? InteractiveTraceColor : NonInteractiveTraceColor;
+		DrawDebugLine(world, startPos, OutHit.Location, color, false, -1.0f, 0, 2.0f);
 	}
 
 	return hitSomething;
@@ -149,8 +173,9 @@ bool UTraceInteractionComponent::ParabolicTrace(const float Speed, const float T
 		if (hitSomething) {
 			points.Add(OutHit.Location);
 
+			auto color = OutHit.Actor.Get()->Implements<UInteractiveObject>() ? InteractiveTraceColor : NonInteractiveTraceColor;
 			for (int j = 1; j < points.Num(); ++j) {
-				DrawDebugLine(world, points[j - 1], points[j], FColor(128, 128, 128), false, -1.0f, 0, 2.0f);
+				DrawDebugLine(world, points[j - 1], points[j], color, false, -1.0f, 0, 2.0f);
 			}
 
 			return true;

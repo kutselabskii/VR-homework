@@ -14,7 +14,14 @@ class SIMPLE_MOVEMENT_API UTraceInteractionComponent : public USceneComponent
 	GENERATED_BODY()
 
 public:
-	bool bUsingLineTrace;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool UsingLineTrace;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UStaticMeshComponent* TeleportationVisuals;
+
+	FColor InteractiveTraceColor = FColor(255, 128, 128);
+	FColor NonInteractiveTraceColor = FColor(128, 128, 128);
 
 	UTraceInteractionComponent();
 
@@ -25,9 +32,6 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void ActivateUpEvent(AActor* Instigator);
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UStaticMeshComponent* TeleportationVisuals;
 
 protected:
 	AActor* FocusedObject;
@@ -40,4 +44,9 @@ protected:
 	virtual void InteractWithHit(const bool HitSomething, const FHitResult& Hit);
 
 	virtual void TeleportPlayer(AActor* Player, const FVector& Location);
+
+private:
+	void NoHitOccured();
+	void HitSameThing(const FHitResult& Hit);
+	void HitOtherThing(const FHitResult& Hit);
 };

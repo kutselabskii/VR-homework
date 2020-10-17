@@ -32,12 +32,12 @@ void ARotatingCube::Tick(float DeltaTime)
 
 void ARotatingCube::TraceHitObject_Implementation()
 {
-
+    isRotating = false;
 }
 
 void ARotatingCube::TraceLeaveObject_Implementation()
 {
-
+    isRotating = true;
 }
 
 void ARotatingCube::TraceHitComponent_Implementation(UPrimitiveComponent* Component)
@@ -57,10 +57,10 @@ void ARotatingCube::TraceMove_Implementation()
 
 void ARotatingCube::TraceActivateDown_Implementation()
 {
-    isRotating = false;
+
 }
 
 void ARotatingCube::TraceActivateUp_Implementation()
 {
-    isRotating = true;
+
 }
