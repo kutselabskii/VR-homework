@@ -7,6 +7,17 @@
 #include "InteractiveObject.h"
 #include "PulsatingSphere.generated.h"
 
+
+UENUM(BlueprintType, meta=(Bitflags))
+enum class SphereColors: uint8
+{
+	None = 0,
+	Red = 1 UMETA(DisplayName = "Red"),
+	Green = 2 UMETA(DisplayName = "Green"),
+	Blue = 4 UMETA(DisplayName = "Blue"),
+};
+ENUM_CLASS_FLAGS( SphereColors )
+
 /**
  * 
  */
@@ -16,6 +27,9 @@ class SIMPLE_MOVEMENT_API APulsatingSphere : public AInteractiveActor, public II
 	GENERATED_BODY()
 	
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Bitmask, BitmaskEnum = SphereColors))
+	uint8 ActiveColors;
+
 	APulsatingSphere();
 	void Tick(float DeltaTime) override;
 

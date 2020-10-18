@@ -2,6 +2,7 @@
 
 
 #include "PulsatingSphere.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include "UObject/ConstructorHelpers.h"
 
 APulsatingSphere::APulsatingSphere() : Super::AInteractiveActor()
@@ -17,6 +18,17 @@ APulsatingSphere::APulsatingSphere() : Super::AInteractiveActor()
 void APulsatingSphere::BeginPlay()
 {
     Super::BeginPlay();
+
+    UMaterialInstanceDynamic* dynamicMaterial = UMaterialInstanceDynamic::Create(StaticMeshComponent->GetMaterial(0), StaticMeshComponent);
+    StaticMeshComponent->SetMaterial(0, dynamicMaterial);
+
+    auto saturation = 255;
+    auto color = FLinearColor(
+        ActiveColors & static_cast<uint8>(SphereColors::Red) * saturation,
+        ActiveColors & static_cast<uint8>(SphereColors::Green) * saturation,
+        ActiveColors & static_cast<uint8>(SphereColors::Blue) * saturation,
+        1.0f);
+    dynamicMaterial->SetVectorParameterValue(TEXT("Color"), color);
 }
 
 void APulsatingSphere::Tick(float DeltaTime)
