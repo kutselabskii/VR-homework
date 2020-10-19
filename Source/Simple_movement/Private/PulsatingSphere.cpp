@@ -22,23 +22,25 @@ void APulsatingSphere::BeginPlay()
     UMaterialInstanceDynamic* dynamicMaterial = UMaterialInstanceDynamic::Create(StaticMeshComponent->GetMaterial(0), StaticMeshComponent);
     StaticMeshComponent->SetMaterial(0, dynamicMaterial);
 
-    auto saturation = 255;
-    auto color = FLinearColor(
-        ActiveColors & static_cast<uint8>(SphereColors::Red) * saturation,
-        ActiveColors & static_cast<uint8>(SphereColors::Green) * saturation,
-        ActiveColors & static_cast<uint8>(SphereColors::Blue) * saturation,
+    float Saturation = (float)ColorSaturation / 255;
+    FLinearColor Color = FLinearColor(
+        ((ActiveColors & (uint8)ESphereColors::Red) != (uint8)ESphereColors::None) * Saturation,
+        ((ActiveColors & (uint8)ESphereColors::Green) != (uint8)ESphereColors::None) * Saturation,
+        ((ActiveColors & (uint8)ESphereColors::Blue) != (uint8)ESphereColors::None)* Saturation,
         1.0f);
-    dynamicMaterial->SetVectorParameterValue(TEXT("Color"), color);
+    dynamicMaterial->SetVectorParameterValue(TEXT("Color"), Color);
 }
 
 void APulsatingSphere::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    auto seconds = GetWorld()->GetRealTimeSeconds();
-    auto value = FMath::InterpSinIn(0.01f, 1.0f, FMath::Sin(seconds));
+    if (ShouldPulse) {
+        auto seconds = GetWorld()->GetRealTimeSeconds();
+        auto value = FMath::InterpSinIn(0.01f, 1.0f, FMath::Sin(seconds));
 
-    SetActorScale3D(FVector(value, value, value));
+        SetActorScale3D(FVector(value, value, value));
+    }
 }
 
 void APulsatingSphere::TraceHitObject_Implementation()
@@ -48,7 +50,7 @@ void APulsatingSphere::TraceHitObject_Implementation()
 
 void APulsatingSphere::TraceLeaveObject_Implementation()
 {
-    
+    ShouldPulse = true;
 }
 
 void APulsatingSphere::TraceHitComponent_Implementation(UPrimitiveComponent* Component)
@@ -68,10 +70,10 @@ void APulsatingSphere::TraceMove_Implementation()
 
 void APulsatingSphere::TraceActivateDown_Implementation()
 {
-
+    ShouldPulse = false;
 }
 
 void APulsatingSphere::TraceActivateUp_Implementation()
 {
-
+    ShouldPulse = true;
 }
