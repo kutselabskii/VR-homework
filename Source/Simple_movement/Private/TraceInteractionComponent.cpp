@@ -22,6 +22,7 @@ UTraceInteractionComponent::UTraceInteractionComponent()
 	if (TeleportationVisualsAsset.Succeeded())
 	{
 		TeleportationVisuals->SetStaticMesh(TeleportationVisualsAsset.Object);
+		TeleportationVisuals->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 
 	if (TeleportationVisualsMaterial.Succeeded()) {

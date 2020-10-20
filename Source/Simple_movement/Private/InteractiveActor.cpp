@@ -9,6 +9,7 @@ AInteractiveActor::AInteractiveActor()
 	
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
 	RootComponent = StaticMeshComponent;
+	StaticMeshComponent->SetSimulatePhysics(true);
 }
 
 void AInteractiveActor::BeginPlay()

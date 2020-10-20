@@ -30,7 +30,7 @@ public:
 	uint8 ActiveColors;
 
 	UPROPERTY(EditAnywhere, meta = (UIMin = 0, UIMax = 255))
-	uint8 ColorSaturation;
+	uint8 ColorSaturation = 255;
 
 	APulsatingSphere();
 	void Tick(float DeltaTime) override;
@@ -49,9 +49,15 @@ public:
 
 	void TraceActivateUp_Implementation() override;
 
+#if WITH_EDITOR
+	void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+#endif
+
 protected:
 	void BeginPlay() override;
 
 private:
 	bool ShouldPulse = true;
+
+	void SetColor();
 };

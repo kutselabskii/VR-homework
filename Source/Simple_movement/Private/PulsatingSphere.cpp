@@ -19,16 +19,14 @@ void APulsatingSphere::BeginPlay()
 {
     Super::BeginPlay();
 
-    UMaterialInstanceDynamic* dynamicMaterial = UMaterialInstanceDynamic::Create(StaticMeshComponent->GetMaterial(0), StaticMeshComponent);
-    StaticMeshComponent->SetMaterial(0, dynamicMaterial);
+    SetColor();
+}
 
-    float Saturation = (float)ColorSaturation / 255;
-    FLinearColor Color = FLinearColor(
-        ((ActiveColors & (uint8)ESphereColors::Red) != (uint8)ESphereColors::None) * Saturation,
-        ((ActiveColors & (uint8)ESphereColors::Green) != (uint8)ESphereColors::None) * Saturation,
-        ((ActiveColors & (uint8)ESphereColors::Blue) != (uint8)ESphereColors::None)* Saturation,
-        1.0f);
-    dynamicMaterial->SetVectorParameterValue(TEXT("Color"), Color);
+void APulsatingSphere::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+{
+    Super::PostEditChangeProperty(PropertyChangedEvent);
+
+    SetColor();
 }
 
 void APulsatingSphere::Tick(float DeltaTime)
@@ -76,4 +74,20 @@ void APulsatingSphere::TraceActivateDown_Implementation()
 void APulsatingSphere::TraceActivateUp_Implementation()
 {
     ShouldPulse = true;
+}
+
+void APulsatingSphere::SetColor()
+{
+    //UMaterialInstanceDynamic* dynamicMaterial = UMaterialInstanceDynamic::Create(StaticMeshComponent->GetMaterial(0), StaticMeshComponent);
+    //StaticMeshComponent->SetMaterial(0, dynamicMaterial);
+
+    float Saturation = (float)ColorSaturation / 255;
+    FLinearColor Color = FLinearColor(
+        ((ActiveColors & (uint8)ESphereColors::Red) != (uint8)ESphereColors::None) * Saturation,
+        ((ActiveColors & (uint8)ESphereColors::Green) != (uint8)ESphereColors::None) * Saturation,
+        ((ActiveColors & (uint8)ESphereColors::Blue) != (uint8)ESphereColors::None) * Saturation,
+        1.0f);
+    //dynamicMaterial->SetVectorParameterValue(TEXT("Color"), Color);
+
+    StaticMeshComponent->SetVectorParameterValueOnMaterials(TEXT("Color"), FVector(Color));
 }
