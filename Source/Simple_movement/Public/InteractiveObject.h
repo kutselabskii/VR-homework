@@ -36,8 +36,14 @@ public:
 	void TraceMove();
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void TraceActivateDown();
+	void TraceTriggerDown();
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void TraceActivateUp();
+	void TraceTriggerUp();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void TraceGripDown(USceneComponent* Object);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void TraceGripUp(USceneComponent* Object);
 };

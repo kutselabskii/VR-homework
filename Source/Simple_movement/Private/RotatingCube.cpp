@@ -12,13 +12,13 @@ ARotatingCube::ARotatingCube() : Super::AInteractiveActor()
     {
         StaticMeshComponent->SetStaticMesh(CubeVisualAsset.Object);
     }
+
+    Mass = 2000.0f;
 }
 
 void ARotatingCube::BeginPlay()
 {
     Super::BeginPlay();
-
-	SetActorScale3D(FVector(1.0f, 2.0f, 1.0f));
 }
 
 void ARotatingCube::Tick(float DeltaTime)
@@ -32,12 +32,12 @@ void ARotatingCube::Tick(float DeltaTime)
 
 void ARotatingCube::TraceHitObject_Implementation()
 {
-    isRotating = false;
+
 }
 
 void ARotatingCube::TraceLeaveObject_Implementation()
 {
-    isRotating = true;
+    isRotating = false;
 }
 
 void ARotatingCube::TraceHitComponent_Implementation(UPrimitiveComponent* Component)
@@ -55,12 +55,24 @@ void ARotatingCube::TraceMove_Implementation()
 
 }
 
-void ARotatingCube::TraceActivateDown_Implementation()
+void ARotatingCube::TraceTriggerDown_Implementation()
 {
-
+    isRotating = true;
 }
 
-void ARotatingCube::TraceActivateUp_Implementation()
+void ARotatingCube::TraceTriggerUp_Implementation()
 {
+    isRotating = false;
+}
 
+void ARotatingCube::TraceGripDown_Implementation(USceneComponent* Object)
+{
+    IsGripped = true;
+    Holder = Object;
+}
+
+void ARotatingCube::TraceGripUp_Implementation(USceneComponent* Object)
+{
+    IsGripped = false;
+    Holder = nullptr;
 }

@@ -8,6 +8,14 @@
 #include "TraceInteractionComponent.generated.h"
 
 
+UENUM()
+enum class ControllerState : uint8
+{
+	Idle = 0,
+	Grip = 1
+};
+
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SIMPLE_MOVEMENT_API UTraceInteractionComponent : public USceneComponent
 {
@@ -28,14 +36,22 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void ActivateDownEvent(AActor* Instigator);
+	void TriggerDownEvent(AActor* Instigator);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void ActivateUpEvent(AActor* Instigator);
+	void TriggerUpEvent(AActor* Instigator);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void GripDownEvent(AActor* Instigator);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void GripUpEvent(AActor* Instigator);
+
 
 protected:
 	AActor* FocusedObject;
 	UPrimitiveComponent* FocusedComponent;
+	ControllerState State = ControllerState::Idle;
 
 	virtual void BeginPlay() override;
 

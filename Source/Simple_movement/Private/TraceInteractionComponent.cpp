@@ -8,6 +8,7 @@
 #include "InteractiveObject.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/Actor.h"
+#include "Components/SceneComponent.h"
 #include "UObject/ConstructorHelpers.h"
 
 UTraceInteractionComponent::UTraceInteractionComponent()
@@ -47,16 +48,19 @@ void UTraceInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickT
 
 	SetRelativeLocationAndRotation(FVector(0, 0, 0), FQuat(0, 0, 0, 0));
 	
-	FHitResult hit;
-	bool hitSomething;
+	if (State == ControllerState::Idle) {
+		FHitResult hit;
+		bool hitSomething;
 
-	if (UsingLineTrace) {
-		hitSomething = LineTrace(1000, hit);
-	} else {
-		hitSomething = ParabolicTrace(1000, 0.1f, 20, hit);
+		if (UsingLineTrace) {
+			hitSomething = LineTrace(1000, hit);
+		}
+		else {
+			hitSomething = ParabolicTrace(1000, 0.1f, 20, hit);
+		}
+
+		InteractWithHit(hitSomething, hit);
 	}
-
-	InteractWithHit(hitSomething, hit);
 }
 
 void UTraceInteractionComponent::InteractWithHit(const bool HitSomething, const FHitResult& Hit)
@@ -189,30 +193,56 @@ bool UTraceInteractionComponent::ParabolicTrace(const float Speed, const float T
 	return false;
 }
 
-void UTraceInteractionComponent::ActivateDownEvent_Implementation(AActor* Instigator)
+void UTraceInteractionComponent::TriggerDownEvent_Implementation(AActor* Instigator)
 {
+	if (State != ControllerState::Idle) {
+		return;
+	}
+
 	if (FocusedObject != nullptr) {
 		if (FocusedObject->Implements<UInteractiveObject>()) {
-			IInteractiveObject::Execute_TraceActivateDown(FocusedObject);
+			IInteractiveObject::Execute_TraceTriggerDown(FocusedObject);
 		}
 	}
 }
 
-void UTraceInteractionComponent::ActivateUpEvent_Implementation(AActor* Instigator)
+void UTraceInteractionComponent::TriggerUpEvent_Implementation(AActor* Instigator)
 {
+	if (State != ControllerState::Idle) {
+		return;
+	}
+
 	if (FocusedObject != nullptr) {
 		if (FocusedObject->Implements<UInteractiveObject>()) {
-			IInteractiveObject::Execute_TraceActivateUp(FocusedObject);
+			IInteractiveObject::Execute_TraceTriggerUp(FocusedObject);
 		} else {
 			TeleportPlayer(Instigator, TeleportationVisuals->GetComponentLocation());
 		}
 	}
 }
 
+void UTraceInteractionComponent::GripDownEvent_Implementation(AActor* Instigator)
+{
+	State = ControllerState::Grip;
+	TeleportationVisuals->SetVisibility(false);
+
+	if (FocusedObject != nullptr && FocusedObject->Implements<UInteractiveObject>()) {
+		IInteractiveObject::Execute_TraceGripDown(FocusedObject, GetAttachParent());
+	}
+}
+
+void UTraceInteractionComponent::GripUpEvent_Implementation(AActor* Instigator)
+{
+	State = ControllerState::Idle;
+	TeleportationVisuals->SetVisibility(true);
+
+	if (FocusedObject != nullptr && FocusedObject->Implements<UInteractiveObject>()) {
+		IInteractiveObject::Execute_TraceGripUp(FocusedObject, GetAttachParent());
+	}
+}
+
 void UTraceInteractionComponent::TeleportPlayer(AActor* Player, const FVector& Location)
 {
-	/*auto cameraLocation = GetWorld()->GetFirstPlayerController()->PlayerCameraManager->GetCameraLocation();
-	Player.GetActorLocation() - cameraLocation*/
 	Player->SetActorLocation(FVector(Location.X, Location.Y, Player->GetActorLocation().Z));
 }
 

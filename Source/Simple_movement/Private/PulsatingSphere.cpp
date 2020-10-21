@@ -13,6 +13,10 @@ APulsatingSphere::APulsatingSphere() : Super::AInteractiveActor()
     {
         StaticMeshComponent->SetStaticMesh(SphereVisualAsset.Object);
     }
+
+    Mass = 250.0f;
+
+    SetActorScale3D(FVector(0.3f, 0.3f, 0.3f));
 }
 
 void APulsatingSphere::BeginPlay()
@@ -35,7 +39,7 @@ void APulsatingSphere::Tick(float DeltaTime)
 
     if (ShouldPulse) {
         auto seconds = GetWorld()->GetRealTimeSeconds();
-        auto value = FMath::InterpSinIn(0.01f, 1.0f, FMath::Sin(seconds));
+        auto value = FMath::InterpSinIn(0.2f, 0.5f, FMath::Sin(seconds));
 
         SetActorScale3D(FVector(value, value, value));
     }
@@ -48,7 +52,7 @@ void APulsatingSphere::TraceHitObject_Implementation()
 
 void APulsatingSphere::TraceLeaveObject_Implementation()
 {
-    ShouldPulse = true;
+    ShouldPulse = false;
 }
 
 void APulsatingSphere::TraceHitComponent_Implementation(UPrimitiveComponent* Component)
@@ -66,28 +70,36 @@ void APulsatingSphere::TraceMove_Implementation()
 
 }
 
-void APulsatingSphere::TraceActivateDown_Implementation()
-{
-    ShouldPulse = false;
-}
-
-void APulsatingSphere::TraceActivateUp_Implementation()
+void APulsatingSphere::TraceTriggerDown_Implementation()
 {
     ShouldPulse = true;
 }
 
+void APulsatingSphere::TraceTriggerUp_Implementation()
+{
+    ShouldPulse = false;
+}
+
+void APulsatingSphere::TraceGripDown_Implementation(USceneComponent* Object)
+{
+    IsGripped = true;
+    Holder = Object;
+}
+
+void APulsatingSphere::TraceGripUp_Implementation(USceneComponent* Object)
+{
+    IsGripped = false;
+    Holder = nullptr;
+}
+
 void APulsatingSphere::SetColor()
 {
-    //UMaterialInstanceDynamic* dynamicMaterial = UMaterialInstanceDynamic::Create(StaticMeshComponent->GetMaterial(0), StaticMeshComponent);
-    //StaticMeshComponent->SetMaterial(0, dynamicMaterial);
-
     float Saturation = (float)ColorSaturation / 255;
     FLinearColor Color = FLinearColor(
         ((ActiveColors & (uint8)ESphereColors::Red) != (uint8)ESphereColors::None) * Saturation,
         ((ActiveColors & (uint8)ESphereColors::Green) != (uint8)ESphereColors::None) * Saturation,
         ((ActiveColors & (uint8)ESphereColors::Blue) != (uint8)ESphereColors::None) * Saturation,
         1.0f);
-    //dynamicMaterial->SetVectorParameterValue(TEXT("Color"), Color);
 
     StaticMeshComponent->SetVectorParameterValueOnMaterials(TEXT("Color"), FVector(Color));
 }

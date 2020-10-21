@@ -36,18 +36,14 @@ public:
 	void Tick(float DeltaTime) override;
 
 	void TraceHitObject_Implementation() override;
-
 	void TraceLeaveObject_Implementation() override;
-
 	void TraceHitComponent_Implementation(UPrimitiveComponent* Component) override;
-
 	void TraceLeaveComponent_Implementation(UPrimitiveComponent* Component) override;
-
 	void TraceMove_Implementation() override;
-
-	void TraceActivateDown_Implementation() override;
-
-	void TraceActivateUp_Implementation() override;
+	void TraceTriggerDown_Implementation() override;
+	void TraceTriggerUp_Implementation() override;
+	void TraceGripDown_Implementation(USceneComponent* Object) override;
+	void TraceGripUp_Implementation(USceneComponent* Object) override;
 
 #if WITH_EDITOR
 	void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
@@ -57,7 +53,7 @@ protected:
 	void BeginPlay() override;
 
 private:
-	bool ShouldPulse = true;
+	bool ShouldPulse = false;
 
 	void SetColor();
 };

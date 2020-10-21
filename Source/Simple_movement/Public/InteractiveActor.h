@@ -18,7 +18,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UStaticMeshComponent* StaticMeshComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float Mass = 500.0f;
+
 protected:
+	USceneComponent* Holder = nullptr;
+	bool IsGripped = false;
+
 	virtual void BeginPlay() override;
 
 public:	
