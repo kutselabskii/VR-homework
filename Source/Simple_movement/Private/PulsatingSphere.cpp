@@ -47,7 +47,7 @@ void APulsatingSphere::Tick(float DeltaTime)
 
 void APulsatingSphere::TraceHitObject_Implementation()
 {
-
+ 
 }
 
 void APulsatingSphere::TraceLeaveObject_Implementation()
@@ -82,8 +82,10 @@ void APulsatingSphere::TraceTriggerUp_Implementation()
 
 void APulsatingSphere::TraceGripDown_Implementation(USceneComponent* Object)
 {
-    IsGripped = true;
-    Holder = Object;
+    if (FVector::Dist(Object->GetComponentLocation(), GetActorLocation()) < 150.0f) {
+        IsGripped = true;
+        Holder = Object;
+    }
 }
 
 void APulsatingSphere::TraceGripUp_Implementation(USceneComponent* Object)
