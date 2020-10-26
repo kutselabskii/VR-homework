@@ -53,6 +53,8 @@ protected:
 	UPrimitiveComponent* FocusedComponent;
 	ControllerState State = ControllerState::Idle;
 
+	const int PlayerHeight = 160;
+
 	virtual void BeginPlay() override;
 
 	virtual bool LineTrace(const float Distance, FHitResult& OutHit);
