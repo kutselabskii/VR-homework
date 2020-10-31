@@ -85,6 +85,7 @@ void APulsatingSphere::TraceGripDown_Implementation(USceneComponent* Object)
     if (FVector::Dist(Object->GetComponentLocation(), GetActorLocation()) < 150.0f) {
         IsGripped = true;
         Holder = Object;
+        StaticMeshComponent->SetEnableGravity(false);
     }
 }
 
@@ -92,6 +93,7 @@ void APulsatingSphere::TraceGripUp_Implementation(USceneComponent* Object)
 {
     IsGripped = false;
     Holder = nullptr;
+    StaticMeshComponent->SetEnableGravity(true);
 }
 
 void APulsatingSphere::SetColor()
