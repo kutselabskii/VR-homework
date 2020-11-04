@@ -54,6 +54,8 @@ protected:
 
 private:
 	bool ShouldPulse = false;
+	float SnowLevel = -10.0f;
 
 	void SetColor();
+	void UpdateSnow(float DeltaTime);
 };

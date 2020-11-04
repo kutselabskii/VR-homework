@@ -43,6 +43,8 @@ void APulsatingSphere::Tick(float DeltaTime)
 
         SetActorScale3D(FVector(value, value, value));
     }
+
+    UpdateSnow(DeltaTime);
 }
 
 void APulsatingSphere::TraceHitObject_Implementation()
@@ -106,4 +108,17 @@ void APulsatingSphere::SetColor()
         1.0f);
 
     StaticMeshComponent->SetVectorParameterValueOnMaterials(TEXT("Color"), FVector(Color));
+}
+
+void APulsatingSphere::UpdateSnow(float DeltaTime)
+{
+    if (GetVelocity().Size() > 0) {
+        SnowLevel -= 2.0f * DeltaTime;
+    } else {
+        SnowLevel += 1.1f * DeltaTime;
+    }
+
+    SnowLevel = FMath::Clamp(SnowLevel, -10.0f, 50.0f);
+
+    StaticMeshComponent->SetScalarParameterValueOnMaterials(TEXT("SnowBias"), SnowLevel);
 }
