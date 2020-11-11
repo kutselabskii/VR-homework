@@ -19,6 +19,9 @@ ARotatingCube::ARotatingCube() : Super::AInteractiveActor()
 void ARotatingCube::BeginPlay()
 {
     Super::BeginPlay();
+    if (ParticleSystemComponent != nullptr) {
+        ParticleSystemComponent->ActivateSystem();
+    }
 }
 
 void ARotatingCube::Tick(float DeltaTime)
@@ -27,6 +30,10 @@ void ARotatingCube::Tick(float DeltaTime)
 
     if (isRotating) {
         AddActorWorldRotation(FRotator(40 * DeltaTime, 150 * DeltaTime, 75 * DeltaTime));
+    }
+
+    if (ParticleSystemComponent != nullptr) {
+        ParticleSystemComponent->SetRelativeLocationAndRotation(FVector(0, 0, 0), FQuat(0, 0, 0, 0));
     }
 }
 
