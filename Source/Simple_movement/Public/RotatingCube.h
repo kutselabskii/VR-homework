@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "InteractiveActor.h"
 #include "InteractiveObject.h"
+#include "FireComponent.h"
 #include "RotatingCube.generated.h"
 
 /**
@@ -16,6 +17,9 @@ class SIMPLE_MOVEMENT_API ARotatingCube : public AInteractiveActor, public IInte
 	GENERATED_BODY()
 	
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UFireComponent* FireComponent;
+
 	ARotatingCube();
 	void Tick(float DeltaTime) override;
 

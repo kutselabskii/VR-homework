@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/StaticMeshComponent.h"
-#include "Particles/ParticleSystemComponent.h"
 #include "InteractiveActor.generated.h"
 
 UCLASS(Abstract, Blueprintable)
@@ -18,9 +17,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UStaticMeshComponent* StaticMeshComponent;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UParticleSystemComponent* ParticleSystemComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float Mass = 500.0f;
