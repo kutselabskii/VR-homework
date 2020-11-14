@@ -17,6 +17,11 @@ UFireComponent::UFireComponent()
 	if (FireAsset.Succeeded()) {
 		FireComponent->SetTemplate(FireAsset.Object);
 	}
+
+	auto strictRules = FAttachmentTransformRules(EAttachmentRule::KeepRelative, true);
+	FireComponent->AttachToComponent(this, strictRules);
+
+	SetRelativeLocation(FVector(0, 0, 0));
 }
 
 void UFireComponent::BeginPlay()
@@ -25,6 +30,8 @@ void UFireComponent::BeginPlay()
 
 	if (bSelfIgnition) {
 		FireComponent->ActivateSystem();
+	} else {
+		FireComponent->DeactivateSystem();
 	}
 }
 
@@ -32,6 +39,6 @@ void UFireComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	SetRelativeLocationAndRotation(FVector(0, 0, 50), FQuat(0, 0, 0, 0));
+	SetRelativeLocation(FVector(0, 0, 0));
 }
 

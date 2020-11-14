@@ -14,7 +14,10 @@ class SIMPLE_MOVEMENT_API UFireComponent : public USceneComponent
 	GENERATED_BODY()
 
 public:	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UParticleSystemComponent* FireComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UParticleSystemComponent* SteamComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
