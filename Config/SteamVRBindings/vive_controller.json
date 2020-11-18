@@ -14,7 +14,7 @@
 					{
 						"click":
 						{
-							"output": "/actions/main/in/GenericLeftClick"
+							"output": "/actions/main/in/GenericLeftTrigger"
 						}
 					}
 				},
@@ -25,29 +25,29 @@
 					{
 						"click":
 						{
-							"output": "/actions/main/in/GenericRightClick"
+							"output": "/actions/main/in/GenericRightTrigger"
 						}
 					}
 				},
 				{
-					"mode": "scalar_constant",
-					"path": "/user/hand/left/input/trigger",
+					"mode": "button",
+					"path": "/user/hand/left/input/grip",
 					"inputs":
 					{
-						"value":
+						"click":
 						{
-							"output": "/actions/main/in/VREditor_TriggerL axis"
+							"output": "/actions/main/in/GenericLeftGrip"
 						}
 					}
 				},
 				{
-					"mode": "scalar_constant",
-					"path": "/user/hand/right/input/trigger",
+					"mode": "button",
+					"path": "/user/hand/right/input/grip",
 					"inputs":
 					{
-						"value":
+						"click":
 						{
-							"output": "/actions/main/in/VREditor_TriggerR axis"
+							"output": "/actions/main/in/GenericRightGrip"
 						}
 					}
 				}
@@ -85,5 +85,5 @@
 			]
 		}
 	},
-	"description": "Simple_movement-11590370"
+	"description": "Simple_movement-14685802"
 }
