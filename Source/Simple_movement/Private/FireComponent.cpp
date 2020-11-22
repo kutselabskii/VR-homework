@@ -16,10 +16,9 @@ UFireComponent::UFireComponent()
 
 	if (FireAsset.Succeeded()) {
 		FireComponent->SetTemplate(FireAsset.Object);
+		auto strictRules = FAttachmentTransformRules(EAttachmentRule::KeepRelative, true);
+		FireComponent->AttachToComponent(this, strictRules);
 	}
-
-	auto strictRules = FAttachmentTransformRules(EAttachmentRule::KeepRelative, true);
-	FireComponent->AttachToComponent(this, strictRules);
 
 	SetRelativeLocation(FVector(0, 0, 0));
 }
