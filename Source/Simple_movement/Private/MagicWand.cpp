@@ -15,11 +15,11 @@ AMagicWand::AMagicWand() : Super::AInteractiveActor()
 
     Mass = 2000.0f;
 
-    if (SpellAsset.Succeeded()) {
-        Spell->SetAsset(SpellAsset.Object);
-    //    auto strictRules = FAttachmentTransformRules(EAttachmentRule::KeepRelative, true);
-    //    Spell->AttachToComponent(RootComponent, strictRules);
-    }
+    //if (SpellAsset.Succeeded()) {
+    //    Spell->SetAsset(SpellAsset.Object);
+    ////    auto strictRules = FAttachmentTransformRules(EAttachmentRule::KeepRelative, true);
+    ////    Spell->AttachToComponent(RootComponent, strictRules);
+    //}
 }
 
 void AMagicWand::BeginPlay()
