@@ -17,7 +17,7 @@ class SIMPLE_MOVEMENT_API AMagicWand : public AInteractiveActor, public IInterac
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(Blueprintable, BlueprintReadWrite, EditAnywhere)
 	UNiagaraComponent* Spell;
 
 	AMagicWand();

@@ -2,24 +2,16 @@
 
 
 #include "MagicWand.h"
-#include "UObject/ConstructorHelpers.h"
 
 AMagicWand::AMagicWand() : Super::AInteractiveActor()
 {
-    static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeVisualAsset(TEXT("/Game/Meshes/BaseCubeMesh"));
-    static ConstructorHelpers::FObjectFinder<UNiagaraSystem> SpellAsset(TEXT("NiagaraSystem'/Game/Particles/LightningSpell/PS_LightningSpell.PS_LightningSpell'"));
-
-    if (CubeVisualAsset.Succeeded()) {
-        StaticMeshComponent->SetStaticMesh(CubeVisualAsset.Object);
-    }
-
     Mass = 2000.0f;
 
-    //if (SpellAsset.Succeeded()) {
-    //    Spell->SetAsset(SpellAsset.Object);
-    ////    auto strictRules = FAttachmentTransformRules(EAttachmentRule::KeepRelative, true);
-    ////    Spell->AttachToComponent(RootComponent, strictRules);
-    //}
+    Spell = CreateDefaultSubobject<UNiagaraComponent>(TEXT("NiagaraComponent"));
+    auto strictRules = FAttachmentTransformRules(EAttachmentRule::KeepRelative, true);
+    //Spell->AttachToComponent(RootComponent, strictRules);
+
+    Spell->SetupAttachment(RootComponent);
 }
 
 void AMagicWand::BeginPlay()
@@ -59,7 +51,9 @@ void AMagicWand::TraceMove_Implementation()
 
 void AMagicWand::TraceTriggerDown_Implementation()
 {
-
+    if (IsGripped) {
+        Spell->ActivateSystem();
+    }
 }
 
 void AMagicWand::TraceTriggerUp_Implementation()
