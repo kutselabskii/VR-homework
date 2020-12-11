@@ -32,6 +32,8 @@ void UFireComponent::BeginPlay()
 	} else {
 		FireComponent->DeactivateSystem();
 	}
+
+	FireComponent->OnParticleCollide.AddDynamic(this, &UFireComponent::ParticleCollide);
 }
 
 void UFireComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -39,5 +41,10 @@ void UFireComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	SetRelativeLocation(FVector(0, 0, 0));
+}
+
+void UFireComponent::ParticleCollide(FName EventName, float EmitterTime, int32 ParticleTime, FVector Location, FVector Velocity, FVector Direction, FVector Normal, FName BoneName, UPhysicalMaterial* PhysMat)
+{
+
 }
 
