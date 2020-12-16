@@ -8,7 +8,7 @@
 #include "FireComponent.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SIMPLE_MOVEMENT_API UFireComponent : public USceneComponent
 {
 	GENERATED_BODY()
@@ -23,8 +23,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bSelfIgnition = false;
 
-	UFUNCTION()
-	void ParticleCollide(FName EventName, float EmitterTime, int32 ParticleTime, FVector Location, FVector Velocity, FVector Direction, FVector Normal, FName BoneName, UPhysicalMaterial* PhysMat);
+	//UFUNCTION()
+	//void ParticleCollide(FName EventName, float EmitterTime, int32 ParticleTime, FVector Location, FVector Velocity, FVector Direction, FVector Normal, FName BoneName, UPhysicalMaterial* PhysMat);
 
 	UFireComponent();
 

@@ -1,8 +1,7 @@
 // Egor Kutselabskii 2020-... No rights reserved, please do not copy my homework
 
-
-#include "GameFramework/PawnMovementComponent.h"
 #include "HumanoidMovementAnimation.h"
+#include "GameFramework/PawnMovementComponent.h"
 
 void UHumanoidMovementAnimation::UpdateAnimationProperties()
 {
