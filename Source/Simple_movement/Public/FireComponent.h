@@ -14,13 +14,13 @@ class SIMPLE_MOVEMENT_API UFireComponent : public USceneComponent
 	GENERATED_BODY()
 
 public:	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(Blueprintable, EditAnywhere, BlueprintReadWrite)
 	UParticleSystemComponent* FireComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(Blueprintable, EditAnywhere, BlueprintReadWrite)
 	UParticleSystemComponent* SteamComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(Blueprintable, EditAnywhere, BlueprintReadWrite)
 	bool bSelfIgnition = false;
 
 	//UFUNCTION()
