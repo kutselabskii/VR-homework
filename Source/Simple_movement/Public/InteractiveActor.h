@@ -29,5 +29,7 @@ protected:
 
 public:	
 	virtual void Tick(float DeltaTime) override;
-
+	
+	virtual void Hold(USceneComponent* Object);
+	virtual void Drop();
 };

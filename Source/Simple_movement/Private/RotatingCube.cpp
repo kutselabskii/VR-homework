@@ -70,15 +70,11 @@ void ARotatingCube::TraceTriggerUp_Implementation()
 void ARotatingCube::TraceGripDown_Implementation(USceneComponent* Object)
 {
     if (FVector::Dist(Object->GetComponentLocation(), GetActorLocation()) < 150.0f) {
-        IsGripped = true;
-        Holder = Object;
-        StaticMeshComponent->SetEnableGravity(false);
+        Hold(Object);
     }
 }
 
 void ARotatingCube::TraceGripUp_Implementation(USceneComponent* Object)
 {
-    IsGripped = false;
-    Holder = nullptr;
-    StaticMeshComponent->SetEnableGravity(true);
+    Drop();
 }

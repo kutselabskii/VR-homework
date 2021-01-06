@@ -22,8 +22,24 @@ void AInteractiveActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (IsGripped && Holder != nullptr) {
-		StaticMeshComponent->SetWorldLocationAndRotation(Holder->GetComponentLocation(), Holder->GetComponentRotation());
-	}
+	//if (IsGripped && Holder != nullptr) {
+	//	StaticMeshComponent->SetWorldLocationAndRotation(Holder->GetComponentLocation(), Holder->GetComponentRotation());
+	//}
 }
 
+void AInteractiveActor::Hold(USceneComponent* Object)
+{
+	IsGripped = true;
+	Holder = Object;
+	auto strictRules = FAttachmentTransformRules(EAttachmentRule::KeepWorld, true);
+	AttachToComponent(Object, strictRules);
+}
+
+void AInteractiveActor::Drop()
+{
+	StaticMeshComponent->SetSimulatePhysics(true);
+	IsGripped = false;
+	Holder = nullptr;
+	auto rules = FDetachmentTransformRules(EDetachmentRule::KeepWorld, true);
+	DetachFromActor(rules);
+}
