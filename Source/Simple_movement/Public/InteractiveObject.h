@@ -20,30 +20,30 @@ class SIMPLE_MOVEMENT_API IInteractiveObject
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	UFUNCTION(Blueprintable, BlueprintCallable, BlueprintNativeEvent)
 	void TraceHitObject();
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	UFUNCTION(Blueprintable, BlueprintCallable, BlueprintNativeEvent)
 	void TraceLeaveObject();
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	UFUNCTION(Blueprintable, BlueprintCallable, BlueprintNativeEvent)
 	void TraceHitComponent(UPrimitiveComponent* Component);
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	UFUNCTION(Blueprintable, BlueprintCallable, BlueprintNativeEvent)
 	void TraceLeaveComponent(UPrimitiveComponent* Component);
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	UFUNCTION(Blueprintable, BlueprintCallable, BlueprintNativeEvent)
 	void TraceMove();
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	UFUNCTION(Blueprintable, BlueprintCallable, BlueprintNativeEvent)
 	void TraceTriggerDown();
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	UFUNCTION(Blueprintable, BlueprintCallable, BlueprintNativeEvent)
 	void TraceTriggerUp();
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	UFUNCTION(Blueprintable, BlueprintCallable, BlueprintNativeEvent)
 	void TraceGripDown(USceneComponent* Object);
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	UFUNCTION(Blueprintable, BlueprintCallable, BlueprintNativeEvent)
 	void TraceGripUp(USceneComponent* Object);
 };
