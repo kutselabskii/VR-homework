@@ -30,9 +30,9 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 	
-	UFUNCTION(Blueprintable, BlueprintCallable, BlueprintNativeEvent)
+	UFUNCTION(BlueprintCallable)
 	virtual void Hold(USceneComponent* Object);
 
-	UFUNCTION(Blueprintable, BlueprintCallable, BlueprintNativeEvent)
+	UFUNCTION(BlueprintCallable)
 	virtual void Drop();
 };
