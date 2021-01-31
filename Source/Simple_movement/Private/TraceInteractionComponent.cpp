@@ -195,10 +195,6 @@ bool UTraceInteractionComponent::ParabolicTrace(const float Speed, const float T
 
 void UTraceInteractionComponent::TriggerDownEvent_Implementation(AActor* Instigator)
 {
-	if (State != ControllerState::Idle) {
-		return;
-	}
-
 	if (FocusedObject != nullptr) {
 		if (FocusedObject->Implements<UInteractiveObject>()) {
 			IInteractiveObject::Execute_TraceTriggerDown(FocusedObject);
