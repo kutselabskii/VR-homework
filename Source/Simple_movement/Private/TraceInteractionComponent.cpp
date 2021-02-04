@@ -18,7 +18,7 @@ UTraceInteractionComponent::UTraceInteractionComponent()
 	TeleportationVisuals = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> TeleportationVisualsAsset(TEXT("/Engine/BasicShapes/Plane.Plane"));
-	static ConstructorHelpers::FObjectFinder<UMaterial> TeleportationVisualsMaterial(TEXT("Material'/Game/Materials/TeleportTexture.TeleportTexture'"));
+	static ConstructorHelpers::FObjectFinder<UMaterial> TeleportationVisualsMaterial(TEXT("Material'/Game/Materials/Snowflake.Snowflake'"));
 
 	if (TeleportationVisualsAsset.Succeeded())
 	{
