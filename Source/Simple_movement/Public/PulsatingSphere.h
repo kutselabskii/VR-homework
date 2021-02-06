@@ -32,6 +32,9 @@ public:
 	UPROPERTY(EditAnywhere, meta = (UIMin = 0, UIMax = 255))
 	uint8 ColorSaturation = 255;
 
+	UPROPERTY(EditAnywhere)
+	bool IsInSnowArea;
+
 	APulsatingSphere();
 	void Tick(float DeltaTime) override;
 

@@ -44,6 +44,13 @@ void APulsatingSphere::Tick(float DeltaTime)
         SetActorScale3D(FVector(value, value, value));
     }
 
+    auto location = GetActorLocation();
+    auto x1 = -22580.0f, y1 = 4550.f, x2 = -2580.0f, y2 = 24550.0f;
+    auto locx = location.X, locy = location.Y;
+
+    IsInSnowArea =
+        locx > x1&& locx < x2 && locy > y1&& locy < y2;
+
     UpdateSnow(DeltaTime);
 }
 
@@ -109,9 +116,11 @@ void APulsatingSphere::SetColor()
 void APulsatingSphere::UpdateSnow(float DeltaTime)
 {
     if (GetVelocity().Size() > 0) {
-        SnowLevel -= 2.0f * DeltaTime;
+        SnowLevel -= GetVelocity().Size() / 20.0f * DeltaTime;
     } else {
-        SnowLevel += 1.1f * DeltaTime;
+        if (IsInSnowArea) {
+            SnowLevel += 1.1f * DeltaTime;
+        }
     }
 
     SnowLevel = FMath::Clamp(SnowLevel, -10.0f, 50.0f);
