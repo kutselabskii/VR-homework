@@ -31,6 +31,9 @@ public:
 	FColor InteractiveTraceColor = FColor(255, 128, 128);
 	FColor NonInteractiveTraceColor = FColor(128, 128, 128);
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Blueprintable)
+	int PlayerHeight = 160;
+
 	UTraceInteractionComponent();
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -52,8 +55,6 @@ protected:
 	AActor* FocusedObject;
 	UPrimitiveComponent* FocusedComponent;
 	ControllerState State = ControllerState::Idle;
-
-	const int PlayerHeight = 160;
 
 	virtual void BeginPlay() override;
 

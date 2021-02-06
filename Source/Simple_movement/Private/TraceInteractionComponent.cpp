@@ -236,6 +236,6 @@ void UTraceInteractionComponent::GripUpEvent_Implementation(AActor* Instigator)
 void UTraceInteractionComponent::TeleportPlayer(AActor* Player, const FVector& Location)
 {
 	// Player->SetActorLocation(FVector(Location.X, Location.Y, Player->GetActorLocation().Z));
-	Player->SetActorLocation(FVector(Location.X, Location.Y, Location.Z));
+	Player->SetActorLocation(FVector(Location.X, Location.Y, Location.Z + PlayerHeight));
 }
 

@@ -32,7 +32,7 @@ void AInteractiveActor::Hold(USceneComponent* Object)
 	IsGripped = true;
 	Holder = Object;
 	auto strictRules = FAttachmentTransformRules(EAttachmentRule::KeepWorld, true);
-	AttachToComponent(Object, strictRules);
+	AttachToComponent(Object, strictRules, TEXT("Socket"));
 }
 
 void AInteractiveActor::Drop()
